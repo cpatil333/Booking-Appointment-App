@@ -1,0 +1,83 @@
+mutation ($input: UserInput!) {
+  signin(input: $input) {
+    id
+    name
+    email
+    role
+  }
+}
+
+{
+  "input": {
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "password": "Password123",
+    "imageUrl": "",
+    "role": "ADMIN"
+  }
+}
+
+mutation($input: LoginInput!){
+  singup(input: $input) {
+    token
+    user {
+      id
+      name
+      role
+    }
+  }
+}
+
+{
+  "input": {
+    "email": "admin@example.com",
+    "password": "Password123",
+  }
+}
+
+mutation($input: AppointmentInput!){
+   appointment(input: $input) {
+    id
+    date
+    startTime
+    endTime
+    userId
+   }
+}
+
+{
+  "input": {
+  "date": "2025-09-09T17:00:00.000Z",
+    "startTime": "2025-09-09T17:00:00.000Z",
+    "endTime": "2025-09-09T18:00:00.000Z",
+    "userId": 1
+  }
+}
+
+
+Queris..
+1.Get User List
+query {
+  users {
+    id
+    name
+    email
+    role
+  }
+}
+
+2.Get Appointment List by users
+query {
+  users {
+    id
+    name
+    email
+    role
+    appointments {
+      id
+      date
+      startTime
+      endTime
+    }
+  }
+}

@@ -1,19 +1,26 @@
 import { gql } from "apollo-server";
 export const typeDefs = gql `
-scalar DateTime
+  scalar DateTime
+
+  enum Role {
+    USER
+    ADMIN
+  }
   type User {
     id: ID!
     name: String!
     email: String!
     password: String!
-    role: String!
+    imageUrl: String!
+    role: Role!
     appointments: [Appointment!]!
   }
 
   type Appointment {
     id: ID!
     date: DateTime
-    time: String
+    startTime: DateTime
+    endTime: DateTime
     createdAt: DateTime
     userId: Int
     user: User!
@@ -23,15 +30,21 @@ scalar DateTime
     name: String!
     email: String!
     password: String!
-    role: String!
+    imageUrl: String!
+    role: Role!
   }
 
   input LoginInput {
-    date: DateTime
-    time: String
-    userId: Int
+    email: String!
+    password: String!
   }
 
+  input AppointmentInput {
+    date: DateTime
+    startTime: DateTime
+    endTime: DateTime
+    userId: Int
+  }
   type Query {
     users: [User!]!
     appointments: [Appointment!]
@@ -41,10 +54,11 @@ scalar DateTime
     token: String!
     user: User!
   }
-  
+
   type Mutation {
-    signin(input: UserInput): User!
-    singup(input: LoginInput): AuthPayload!
+    signin(input: UserInput!): User!
+    singup(input: LoginInput!): AuthPayload!
+    appointment(input: AppointmentInput!): Appointment!
   }
 `;
 //# sourceMappingURL=index.js.map
