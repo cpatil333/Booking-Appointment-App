@@ -59,6 +59,7 @@ export const typeDefs = gql`
   type Mutation {
     signin(input: UserInput!): User!
     singup(input: LoginInput!): AuthPayload!
-    appointment(input: AppointmentInput!): Appointment!
+    bookAppointment(input: AppointmentInput!): Appointment
+    cancelAppointment(id: ID!): Boolean
   }
 `;

@@ -2,6 +2,12 @@ import { sign } from "../auth/auth.js";
 import type { Context } from "../context.js";
 import bcrypt from "bcryptjs";
 
+function requiredRole(ctx: Context, roles: String[]) {
+  if (!ctx.user || !roles.includes(ctx.user.role)) {
+    throw new Error("Not Authorized!");
+  }
+}
+
 export const resolvers = {
   Query: {
     users: async (parent: any, args: any, ctx: Context) => {
@@ -16,6 +22,7 @@ export const resolvers = {
       return ctx.prisma.appointment.findMany();
     },
   },
+
   Mutation: {
     signin: async (parent: any, { input }: any, ctx: Context) => {
       const user = await ctx.prisma.user.findFirst({
@@ -56,7 +63,8 @@ export const resolvers = {
       };
     },
 
-    appointment: async (parent: any, { input }: any, ctx: Context) => {
+    bookAppointment: async (parent: any, { input }: any, ctx: Context) => {
+      requiredRole(ctx, ["ADMIN", "USER"]);
       return ctx.prisma.appointment.create({
         data: {
           ...input,

@@ -20,7 +20,7 @@ const upload = multer({ storage });
 
 router.post("/", upload.single("imageUrl"), (req, res) => {
   if (req.file) {
-    res.json({ filename: req.file.fieldname });
+    res.json({ filename: req.file.filename });
   } else {
     res.status(400).json({ Error: "No file uploded" });
   }

@@ -26,7 +26,7 @@ export const Navbar = () => {
                 <Link to="/">Users</Link>
               </li>
               <li>
-                <Link>Appointments</Link>
+                <Link to="/appointment">Appointments</Link>
               </li>
               <li>
                 <Link onClick={logout}>Logout</Link>
@@ -35,7 +35,7 @@ export const Navbar = () => {
           ) : (
             <>
               <li>
-                <Link>Register</Link>
+                <Link to="/register">Register</Link>
               </li>
               <li>
                 <Link to="/login">Login</Link>
