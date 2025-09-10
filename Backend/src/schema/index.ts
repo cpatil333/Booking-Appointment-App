@@ -19,11 +19,11 @@ export const typeDefs = gql`
 
   type Appointment {
     id: ID!
-    date: DateTime
-    startTime: DateTime
-    endTime: DateTime
-    createdAt: DateTime
-    userId: Int
+    date: DateTime!
+    startTime: DateTime!
+    endTime: DateTime!
+    createdAt: String!
+    userId: Int!
     user: User!
   }
 
@@ -41,19 +41,21 @@ export const typeDefs = gql`
   }
 
   input AppointmentInput {
-    date: DateTime
-    startTime: DateTime
-    endTime: DateTime
-    userId: Int
-  }
-  type Query {
-    users: [User!]!
-    appointments: [Appointment!]
+    date: String!
+    startTime: String!
+    endTime: String!
+    userId: Int!
   }
 
   type AuthPayload {
     token: String!
     user: User!
+  }
+
+  type Query {
+    users: [User!]!
+    appointments: [Appointment!]
+    myAppointments(id: ID!): [Appointment!]!
   }
 
   type Mutation {

@@ -1,34 +1,41 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { BOOK_APPOINTMENT } from "../apollo/Mutation";
+import { useSelector } from "react-redux";
 
 export const BookingForm = ({ onAdd }) => {
-  const [form, setForm] = useState({ name: "", email: "", date: "", time: "" });
+  const [form, setForm] = useState({ date: "", startTime: "", endTime: "" });
+  const [bookAppointment] = useMutation(BOOK_APPOINTMENT);
+  const { user } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAdd({ ...form, id: Date.now() });
-    setForm({ name: "", email: "", date: "", time: "" });
+    try {
+      const { data } = await bookAppointment({
+        variables: {
+          input: {
+            date: form.date,
+            startTime: `${form.date}T${form.startTime}:00Z`,
+            endTime: `${form.date}T${form.endTime}:00Z`,
+            userId: parseInt(user?.id),
+          },
+        },
+      });
+
+      console.log("Appointment booked:", data.bookAppointment);
+      setForm({ date: "", startTime: "", endTime: "" });
+    } catch (err) {
+      console.error("Error booking appointment", err);
+    }
   };
+
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-        <input
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          placeholder="Email"
-          required
-        />
         <input
           type="date"
           name="date"
@@ -38,8 +45,15 @@ export const BookingForm = ({ onAdd }) => {
         />
         <input
           type="time"
-          name="time"
-          value={form.time}
+          name="startTime"
+          value={form.startTime}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="time"
+          name="endTime"
+          value={form.endTime}
           onChange={handleChange}
           required
         />

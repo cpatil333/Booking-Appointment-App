@@ -26,6 +26,14 @@ export declare const resolvers: {
             createdAt: Date;
             userId: number;
         }[]>;
+        myAppointments: (parent: any, { id }: any, ctx: Context) => Promise<{
+            date: string;
+            startTime: string;
+            endTime: string;
+            id: number;
+            createdAt: Date;
+            userId: number;
+        }[]>;
     };
     Mutation: {
         signin: (parent: any, { input }: any, ctx: Context) => Promise<{
@@ -47,7 +55,24 @@ export declare const resolvers: {
                 role: string;
             };
         }>;
-        appointment: (parent: any, { input }: any, ctx: Context) => Promise<{
+        bookAppointment: (parent: any, { input }: any, ctx: Context) => Promise<{
+            user: {
+                id: number;
+                name: string;
+                email: string;
+                password: string;
+                imageUrl: string;
+                role: string;
+            };
+        } & {
+            id: number;
+            date: Date;
+            startTime: Date;
+            endTime: Date;
+            createdAt: Date;
+            userId: number;
+        }>;
+        cancelAppointment: (parent: any, { id }: any, ctx: Context) => Promise<true | {
             id: number;
             date: Date;
             startTime: Date;

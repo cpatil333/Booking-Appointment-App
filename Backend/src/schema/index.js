@@ -18,11 +18,11 @@ export const typeDefs = gql `
 
   type Appointment {
     id: ID!
-    date: DateTime
-    startTime: DateTime
-    endTime: DateTime
-    createdAt: DateTime
-    userId: Int
+    date: DateTime!
+    startTime: DateTime!
+    endTime: DateTime!
+    createdAt: String!
+    userId: Int!
     user: User!
   }
 
@@ -40,14 +40,10 @@ export const typeDefs = gql `
   }
 
   input AppointmentInput {
-    date: DateTime
-    startTime: DateTime
-    endTime: DateTime
-    userId: Int
-  }
-  type Query {
-    users: [User!]!
-    appointments: [Appointment!]
+    date: String!
+    startTime: String!
+    endTime: String!
+    userId: Int!
   }
 
   type AuthPayload {
@@ -55,10 +51,17 @@ export const typeDefs = gql `
     user: User!
   }
 
+  type Query {
+    users: [User!]!
+    appointments: [Appointment!]
+    myAppointments(id: ID!): [Appointment!]!
+  }
+
   type Mutation {
     signin(input: UserInput!): User!
     singup(input: LoginInput!): AuthPayload!
-    appointment(input: AppointmentInput!): Appointment!
+    bookAppointment(input: AppointmentInput!): Appointment
+    cancelAppointment(id: ID!): Boolean
   }
 `;
 //# sourceMappingURL=index.js.map

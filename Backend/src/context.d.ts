@@ -4,5 +4,8 @@ export type Context = {
     prisma: PrismaClient;
     user: JwtUser | null;
 };
-export declare const createContext: ({ req }: any) => Context;
+export declare function createContext({ req, res, }: {
+    req: any;
+    res: any;
+}): Promise<Context>;
 //# sourceMappingURL=context.d.ts.map

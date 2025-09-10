@@ -36,20 +36,24 @@ mutation($input: LoginInput!){
 }
 
 mutation($input: AppointmentInput!){
-   appointment(input: $input) {
+  bookAppointment(input: $input) {
     id
     date
     startTime
     endTime
-    userId
-   }
+    createdAt
+    user {
+      id
+      name
+    }
+  }
 }
 
 {
   "input": {
-  "date": "2025-09-09T17:00:00.000Z",
-    "startTime": "2025-09-09T17:00:00.000Z",
-    "endTime": "2025-09-09T18:00:00.000Z",
+  "date": "2025-09-11T00:00:00.000Z",
+    "startTime": "2025-09-11T09:00:00.000Z",
+    "endTime": "2025-09-11T09:30:00.000Z",
     "userId": 1
   }
 }
@@ -79,5 +83,15 @@ query {
       startTime
       endTime
     }
+  }
+}
+
+3.Get appointment by id
+query ($myAppointmentsId: ID!) {
+  myAppointments(id: $myAppointmentsId) {
+    id
+    date
+    startTime
+    endTime
   }
 }

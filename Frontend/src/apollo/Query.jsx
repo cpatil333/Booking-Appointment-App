@@ -10,3 +10,14 @@ export const GET_USERS = gql`
     }
   }
 `;
+
+export const GET_APPOINTMENT = gql`
+  query ($myAppointmentsId: ID!) {
+    myAppointments(id: $myAppointmentsId) {
+      id
+      date
+      startTime
+      endTime
+    }
+  }
+`;

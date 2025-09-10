@@ -16,7 +16,7 @@ export function sign(user: JwtUser) {
 }
 
 export function getUserFromReq(req: Request): JwtUser | null {
-  const token = req.headers["authorization"]?.replace("Beare ", "");
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
   if (!token) return null;
   try {
     return jwt.verify(token, SECRET) as JwtUser;

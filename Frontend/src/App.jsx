@@ -5,6 +5,7 @@ import { Login } from "./components/Login";
 import { Home } from "./pages/Home";
 import { Register } from "./pages/Register";
 import { ErrorPage } from "./components/ErrorPage";
+import { getappointment } from "./API/getappointments";
 
 function App() {
   const router = createBrowserRouter([
@@ -16,6 +17,7 @@ function App() {
         {
           path: "/",
           element: <Home />,
+          loader: getappointment,
         },
         {
           path: "/register",

@@ -1,6 +1,7 @@
 import { sign } from "../auth/auth.js";
 import type { Context } from "../context.js";
 import bcrypt from "bcryptjs";
+import { format } from "date-fns";
 
 function requiredRole(ctx: Context, roles: String[]) {
   if (!ctx.user || !roles.includes(ctx.user.role)) {
@@ -20,6 +21,21 @@ export const resolvers = {
 
     appointments: async (parent: any, args: any, ctx: Context) => {
       return ctx.prisma.appointment.findMany();
+    },
+
+    myAppointments: async (parent: any, { id }: any, ctx: Context) => {
+      requiredRole(ctx, ["USER", "ADMIN"]);
+      const appts = await ctx.prisma.appointment.findMany({
+        where: { userId: parseInt(id) },
+        orderBy: { startTime: "asc" },
+      });
+      // Convert date fields
+      return appts.map((a) => ({
+        ...a,
+        date: format(a.date, "yyyy-MM-dd"), // "2025-09-11"
+        startTime: format(a.startTime, "HH:mm:ss"), // "09:00:00"
+        endTime: format(a.endTime, "HH:mm:ss"), // "09:30:00"
+      }));
     },
   },
 
@@ -64,12 +80,21 @@ export const resolvers = {
     },
 
     bookAppointment: async (parent: any, { input }: any, ctx: Context) => {
-      requiredRole(ctx, ["ADMIN", "USER"]);
+      requiredRole(ctx, ["USER", "ADMIN"]);
       return ctx.prisma.appointment.create({
         data: {
-          ...input,
+          date: new Date(input.date),
+          startTime: new Date(input.startTime),
+          endTime: new Date(input.endTime),
+          userId: parseInt(input.userId),
         },
+        include: { user: true },
       });
+    },
+
+    cancelAppointment: async (parent: any, { id }: any, ctx: Context) => {
+      return await ctx.prisma.appointment.delete({ where: { id: Number(id) } });
+      return true;
     },
   },
 };

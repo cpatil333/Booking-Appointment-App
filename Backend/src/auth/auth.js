@@ -6,7 +6,7 @@ export function sign(user) {
     return jwt.sign(user, SECRET, { expiresIn: "7d" });
 }
 export function getUserFromReq(req) {
-    const token = req.headers["authorization"]?.replace("Beare ", "");
+    const token = req.headers["authorization"]?.replace("Bearer ", "");
     if (!token)
         return null;
     try {

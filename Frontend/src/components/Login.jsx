@@ -23,7 +23,8 @@ export const Login = () => {
       const { data } = await singup({
         variables: {
           input: {
-            ...formData,
+            email: formData.email,
+            password: formData.password,
           },
         },
       });

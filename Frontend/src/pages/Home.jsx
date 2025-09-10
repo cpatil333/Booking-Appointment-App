@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { BookingForm } from "../pages/BookingForm";
 import { AppointmentList } from "../pages/AppointmentList";
+import { useLoaderData } from "react-router-dom";
 
 export const Home = () => {
   const [appointments, setAppointments] = useState([]);
-
+  const appList = useLoaderData();
+  console.log(appList);
+  setAppointments(appList);
   const addAppointment = (newAppt) => {
     setAppointments([...appointments, newAppt]);
   };

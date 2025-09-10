@@ -1,17 +1,23 @@
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const path = location.pathname.toLowerCase();
-  const token = localStorage.getItem("token") || null;
+  //const token = localStorage.getItem("token") || null;
+  const { user, token } = useSelector((state) => state.auth);
 
-  if (!token && path !== "/login" && path !== "/register") {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!token && path !== "/login" && path !== "/register") {
+      navigate("/login", { replace: true });
+    }
+  }, [token, path, navigate]);
 
   const logout = () => {
-    localStorage.removeItem("token");
+    dispatch(logout());
     navigate("/login", { replace: true });
   };
 

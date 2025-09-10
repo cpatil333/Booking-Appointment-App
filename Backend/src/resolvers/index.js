@@ -1,5 +1,11 @@
 import { sign } from "../auth/auth.js";
 import bcrypt from "bcryptjs";
+import { format } from "date-fns";
+function requiredRole(ctx, roles) {
+    if (!ctx.user || !roles.includes(ctx.user.role)) {
+        throw new Error("Not Authorized!");
+    }
+}
 export const resolvers = {
     Query: {
         users: async (parent, args, ctx) => {
@@ -11,6 +17,20 @@ export const resolvers = {
         },
         appointments: async (parent, args, ctx) => {
             return ctx.prisma.appointment.findMany();
+        },
+        myAppointments: async (parent, { id }, ctx) => {
+            requiredRole(ctx, ["USER", "ADMIN"]);
+            const appts = await ctx.prisma.appointment.findMany({
+                where: { userId: parseInt(id) },
+                orderBy: { startTime: "asc" },
+            });
+            // Convert date fields
+            return appts.map((a) => ({
+                ...a,
+                date: format(a.date, "yyyy-MM-dd"), // "2025-09-11"
+                startTime: format(a.startTime, "HH:mm:ss"), // "09:00:00"
+                endTime: format(a.endTime, "HH:mm:ss"), // "09:30:00"
+            }));
         },
     },
     Mutation: {
@@ -49,12 +69,21 @@ export const resolvers = {
                 user,
             };
         },
-        appointment: async (parent, { input }, ctx) => {
+        bookAppointment: async (parent, { input }, ctx) => {
+            requiredRole(ctx, ["USER", "ADMIN"]);
             return ctx.prisma.appointment.create({
                 data: {
-                    ...input,
+                    date: new Date(input.date),
+                    startTime: new Date(input.startTime),
+                    endTime: new Date(input.endTime),
+                    userId: parseInt(input.userId),
                 },
+                include: { user: true },
             });
+        },
+        cancelAppointment: async (parent, { id }, ctx) => {
+            return await ctx.prisma.appointment.delete({ where: { id: Number(id) } });
+            return true;
         },
     },
 };

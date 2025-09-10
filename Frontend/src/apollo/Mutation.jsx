@@ -23,3 +23,19 @@ export const USER_LOGIN = gql`
     }
   }
 `;
+
+export const BOOK_APPOINTMENT = gql`
+  mutation ($input: AppointmentInput!) {
+    bookAppointment(input: $input) {
+      id
+      date
+      startTime
+      endTime
+      createdAt
+      user {
+        id
+        name
+      }
+    }
+  }
+`;
