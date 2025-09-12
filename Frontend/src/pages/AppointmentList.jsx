@@ -9,8 +9,8 @@ export const AppointmentList = ({ appointments, onCancel }) => {
       ) : (
         <ul>
           {appointments.map((appt) => (
-            <li key={appt.id}>
-              {appt.name} - {appt.date} at {appt.time}
+            <li key={appt.id} style={{listStyle:"none"}}>
+              {appt.date} at {appt.startTime} - {appt.endTime}
               <button onClick={() => onCancel(appt.id)}>Cancel</button>
             </li>
           ))}

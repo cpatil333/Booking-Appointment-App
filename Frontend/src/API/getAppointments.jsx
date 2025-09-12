@@ -14,8 +14,8 @@ export async function getappointment() {
       },
       fetchPolicy: "network-only",
     });
-    return { data };
     console.log(data);
+    return { data };
   } catch (error) {
     throw new Response("Fetching data error ", { status: 500 });
   }
